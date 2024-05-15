@@ -1,0 +1,25 @@
+
+
+
+Draft 5/14/2024
+
+Include:
+- Color wheel
+- Default colors (Able to change)
+- Setting color from hex directly
+- A blank canvas (White?)
+- Tools
+- Pixels of data (Matrix?)
+- Zoom In/Out?
+
+
+Design:
+- Sidebar with the tools (Can minimize)
+- 
+
+Started:
+
+
+
+Finished:
+
