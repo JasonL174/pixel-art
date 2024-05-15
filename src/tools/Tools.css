@@ -1,8 +1,10 @@
 
 
 .sidebar {
-    height: 100%;
-    background-color: antiquewhite;
+    height: 100vh;
+    background-color: gray;
     align-items: center;
     float: left;
 }
+
+

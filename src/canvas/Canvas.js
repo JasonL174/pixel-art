@@ -1,8 +1,8 @@
 import {useRef, useEffect} from 'react';
 import './Canvas.css'
 
-let canvas_width = 1300, canvas_height = 750;
-let line_width = 5;
+let canvas_width = 1300, canvas_height = window.innerHeight;
+// let line_color = 'black';
 
 
 function Canvas(props) {
@@ -26,29 +26,41 @@ function Canvas(props) {
         
         function draw(canvas, event, ctx) {
             ctx.beginPath();
-            ctx.lineWidth = line_width;
+            console.log(props.line_width);
+            ctx.lineWidth = props.line_width;
             ctx.lineCap = 'round'; 
-            ctx.moveTo(coord.x, coord.y)
-            getPosition(canvas, event)
-            ctx.lineTo(coord.x, coord.y)
+            ctx.moveTo(coord.x, coord.y);
+            ctx.strokeStyle = props.color;
+            getPosition(canvas, event);
+            ctx.lineTo(coord.x, coord.y);
             ctx.stroke();
         }
 
-        canvas.addEventListener('mousedown', (e) => {
+        const handleMouseDown = (e) => {
             flag = true;
             getPosition(canvas, e)
-        });
+        };
 
-        canvas.addEventListener('mouseup', () => {
+        const handleMouseUp = () => {
             flag = false;
-        });
+        }
 
-        canvas.addEventListener('mousemove', (e) => {
+        const handleMouseMove = (e) => {
             if (flag) {
                 draw(canvas, e, context);
             }
-        });
-    }, []);
+        }
+
+        canvas.addEventListener('mousedown', handleMouseDown);
+        canvas.addEventListener('mouseup', handleMouseUp);
+        canvas.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            canvas.removeEventListener('mousedown', handleMouseDown);
+            canvas.removeEventListener('mouseup', handleMouseUp);
+            canvas.removeEventListener('mousemove', handleMouseMove);
+        }
+    }, [props.line_width, props.color]);
 
     return <canvas ref={canvas_ref} width={canvas_width} height={canvas_height}/>
 }
