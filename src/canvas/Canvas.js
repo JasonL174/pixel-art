@@ -1,4 +1,4 @@
-import {useRef, useEffect} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import './Canvas.css'
 
 let canvas_width = 1300, canvas_height = window.innerHeight;
@@ -8,6 +8,24 @@ let canvas_width = 1300, canvas_height = window.innerHeight;
 function Canvas(props) {
 
     const canvas_ref = useRef(null);
+
+    const [rows, setRows] = useState(16);
+    const [cols, setCols] = useState(16);
+    const [canvas, setCanvas] = useState(createCanvas(rows, cols));
+
+    function createCanvas(r, c) { // Let (r, c) be the new canvas size, expensive to use
+        let new_canvas = [];
+        for (let i = 0; i < r; i++) {
+            const row = [];
+            for (let j = 0; j < c; j++) {
+                row.push(0);
+            }
+            new_canvas.push(row);
+        }
+        setCanvas(new_canvas)
+        setRows(r);
+        setCols(c);
+    }
 
     useEffect(() => {
         const canvas = canvas_ref.current;

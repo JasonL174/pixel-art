@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Canvas color={color} line_width={line_width}/>
-        <Tools color={color} setColor={setColor} setLineWidth={setLineWidth}/>
+        <Tools color={color} setColor={setColor} line_width={line_width} setLineWidth={setLineWidth}/>
       </header>
     </div>
   );
