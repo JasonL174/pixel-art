@@ -1,10 +1,13 @@
 import './Tools.css'
-// import {useState} from 'react';
+import {useState} from 'react';
 
 
 
 
 function Tools(props) {
+    const [rows, setRows] = useState(props.grid.rows);
+    const [cols, setCols] = useState(props.grid.cols);
+
     function colorChange() {
         if (props.color === 'blue') {
             props.setColor('black');
@@ -30,19 +33,28 @@ function Tools(props) {
         props.setColor('white');
     }
 
-    function line_change(e) {
-        if (typeof e.target.value == "number") {
-            props.setLineWidth(e.target.value);
-        } else {
-            
+    function changeRows(e) {
+        console.log(e.target.value);
+        if (!isNaN(e.target.value)) {
+            setRows(e.target.value);
         }
+    }
+
+    function changeCols(e) {
+        if (!isNaN(e.target.value)) {
+            setCols(e.target.value);
+        }
+    }
+
+    function changeGrid() {
+        props.setGrid((prev) => ({...prev, rows: rows, cols: cols}))
     }
 
     
 
     return (
         <div className='sidebar'>
-            <p>This is the sidebar</p>
+            <p>sidebar</p>
             <div id='color' onClick={colorChange}>Color</div>
             <div id='pencil' onClick={thinPen}>Pencil</div>
             <div id='paintbrush' onClick={thickPen}>Paintbrush</div>
@@ -52,8 +64,13 @@ function Tools(props) {
             <div>Redo</div>
             <div id='line'> 
                 <p>Set Width</p>
-                <input placeholder="Enter pixel size" value={props.line_width} on={line_change}/>
+                <input placeholder="Enter size" value={rows} onChange={changeRows}/>
+                <p>Set Height</p>
+                <input placeholder="Enter size" value={cols} onChange={changeCols}/>
+                <p>Submit</p>
+                <button onClick={changeGrid} onKeyDown={changeGrid}>Submit</button>
             </div>
+
         </div>
     );
 }

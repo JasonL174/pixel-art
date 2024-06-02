@@ -1,17 +1,22 @@
-
-
-
-canvas {
+.canvas {
     background-color: white;
     float: left;
     margin-left: 0;
     margin-right: auto;
+    border: solid white 10px;
 }
 
-.canvas {
-    
+.row {
+    display: inline-block;
+    align-items: center;
+    text-align: center;
 }
 
 .cell {
-
+    /* background-color: ; */
+    background-color: var(--cell-bg-color);
+    border:1px solid black;
+    width: 32px;
+    height: 32px;
+    position: relative;
 }

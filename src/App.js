@@ -5,13 +5,13 @@ import {useState} from 'react'
 
 function App() {
   const [color, setColor] = useState('black');
-  const [line_width, setLineWidth] = useState(5);
+  const [grid, setGrid] = useState({rows: 16, cols: 16});
 
   return (
     <div className="App">
       <header className="App-header">
-        <Canvas color={color} line_width={line_width}/>
-        <Tools color={color} setColor={setColor} line_width={line_width} setLineWidth={setLineWidth}/>
+        <Canvas color={color} grid={grid} setGrid={setGrid} />
+        <Tools color={color} setColor={setColor} grid={grid} setGrid={setGrid}/>
       </header>
     </div>
   );

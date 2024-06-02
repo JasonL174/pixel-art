@@ -1,86 +1,73 @@
-import {useRef, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import './Canvas.css'
 
-let canvas_width = 1300, canvas_height = window.innerHeight;
-// let line_color = 'black';
-
-
 function Canvas(props) {
+    const [canvas, setCanvas] = useState(createEmptyCanvas(props.grid.rows, props.grid.cols));
 
-    const canvas_ref = useRef(null);
-
-    const [rows, setRows] = useState(16);
-    const [cols, setCols] = useState(16);
-    const [canvas, setCanvas] = useState(createCanvas(rows, cols));
-
-    function createCanvas(r, c) { // Let (r, c) be the new canvas size, expensive to use
+    function createEmptyCanvas(r, c) { // Let (r, c) be the new canvas size, expensive to use
         let new_canvas = [];
         for (let i = 0; i < r; i++) {
             const row = [];
             for (let j = 0; j < c; j++) {
-                row.push(0);
+                row.push({id: `${i},${j}`, rgb: '#ffffff'});
             }
             new_canvas.push(row);
         }
-        setCanvas(new_canvas)
-        setRows(r);
-        setCols(c);
+        return new_canvas;
     }
 
-    useEffect(() => {
-        const canvas = canvas_ref.current;
-        const context = canvas.getContext('2d');
-        let coord = {x:0, y:0}
+    useEffect(() => { // Change with regards to changes to canvas size
+        let rows = props.grid.rows;
+        let cols = props.grid.cols;
 
-        // context.fillStyle = 'red';
+        setCanvas(canvas => {
 
-        let flag = false;
+            if (!canvas) return createEmptyCanvas(rows, cols);
 
-        function getPosition(canvas, event){ 
-            const rect = canvas.getBoundingClientRect()
-            coord.x = event.clientX - rect.left; 
-            coord.y = event.clientY - rect.top; 
-          } 
-        
-        function draw(canvas, event, ctx) {
-            ctx.beginPath();
-            console.log(props.line_width);
-            ctx.lineWidth = props.line_width;
-            ctx.lineCap = 'round'; 
-            ctx.moveTo(coord.x, coord.y);
-            ctx.strokeStyle = props.color;
-            getPosition(canvas, event);
-            ctx.lineTo(coord.x, coord.y);
-            ctx.stroke();
-        }
+            let new_canvas = createEmptyCanvas(rows, cols);
 
-        const handleMouseDown = (e) => {
-            flag = true;
-            getPosition(canvas, e)
-        };
-
-        const handleMouseUp = () => {
-            flag = false;
-        }
-
-        const handleMouseMove = (e) => {
-            if (flag) {
-                draw(canvas, e, context);
+            for (let i = 0; i < Math.min(rows, canvas.width); i++) {
+                for (let j = 0; j < Math.min(cols, canvas.height); j++) {
+                    new_canvas[i][j] = canvas[i][j];
+                }
             }
+
+            return new_canvas;
+        });
+    }, [props.grid]);
+
+    useEffect(() => { // Change with regards to 
+        
+    })
+
+    function handleClick(s) {
+        let comma = s.indexOf(",");
+        let i = parseInt(s.substring(0, comma));
+        let j = parseInt(s.substring(comma+1));
+        console.log(i.toString().concat(",".concat(j.toString())));
+
+        let prev_c = canvas[i][j]["rgb"]
+        let next_c = "#000000"
+        if (prev_c === "#000000") {
+            next_c = "#ffffff"
         }
+        
+        setCanvas(prev_canvas => {
+            const new_canvas = prev_canvas.map(r => r.map(c => ({...c})));
+            new_canvas[i][j] = {id: `${i},${j}`, rgb: next_c};
+            return new_canvas;
+        });
+    }
 
-        canvas.addEventListener('mousedown', handleMouseDown);
-        canvas.addEventListener('mouseup', handleMouseUp);
-        canvas.addEventListener('mousemove', handleMouseMove);
+    var output = canvas.map(r => 
+        <div className='row'>
+        {r.map(c => 
+            <div className='cell' key={c.id} onClick={() => handleClick(c.id)} style={{ '--cell-bg-color': c.rgb }}>
 
-        return () => {
-            canvas.removeEventListener('mousedown', handleMouseDown);
-            canvas.removeEventListener('mouseup', handleMouseUp);
-            canvas.removeEventListener('mousemove', handleMouseMove);
-        }
-    }, [props.line_width, props.color]);
+            </div>)}
+        </div>)
 
-    return <canvas ref={canvas_ref} width={canvas_width} height={canvas_height}/>
+    return <div className="canvas">{output}</div>
 }
 
 
