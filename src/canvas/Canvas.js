@@ -20,15 +20,14 @@ function Canvas(props) {
         let rows = props.grid.rows;
         let cols = props.grid.cols;
 
-        setCanvas(canvas => {
-
-            if (!canvas) return createEmptyCanvas(rows, cols);
+        setCanvas(prev_canvas => {
+            if (!prev_canvas) return createEmptyCanvas(rows, cols);
 
             let new_canvas = createEmptyCanvas(rows, cols);
 
-            for (let i = 0; i < Math.min(rows, canvas.width); i++) {
-                for (let j = 0; j < Math.min(cols, canvas.height); j++) {
-                    new_canvas[i][j] = canvas[i][j];
+            for (let i = 0; i < Math.min(rows, prev_canvas.length); i++) {
+                for (let j = 0; j < Math.min(cols, prev_canvas[i].length); j++) {
+                    new_canvas[i][j] = prev_canvas[i][j];
                 }
             }
 
